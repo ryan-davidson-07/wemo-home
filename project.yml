@@ -1,0 +1,77 @@
+name: WemoHome
+options:
+  minimumXcodeGenVersion: 2.44.0
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+packages:
+  WemoHomeCore:
+    path: .
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    CODE_SIGN_STYLE: Automatic
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 1.0.0
+    TARGETED_DEVICE_FAMILY: "1"
+    # Optional ignored local file; no team or account is stored in this spec.
+    # Override bundle identifier and team in Local.xcconfig on the signing Mac.
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
+fileGroups:
+  - README.md
+  - DEPLOYMENT_MAC.md
+  - DEVELOPMENT_LINUX.md
+  - DEVELOPMENT_STATUS.md
+  - THIRD_PARTY_NOTICES.md
+  - VALIDATION_LOG.txt
+  - Package.swift
+  - Config
+  - Local.xcconfig.example
+targets:
+  WemoHome:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+        excludes:
+          - Info.plist
+    dependencies:
+      - package: WemoHomeCore
+        product: WemoCore
+    settings:
+      base:
+        PRODUCT_NAME: WemoHome
+        INFOPLIST_FILE: App/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SUPPORTS_MACCATALYST: NO
+  WemoCoreTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests/WemoCoreTests
+    dependencies:
+      - package: WemoHomeCore
+        product: WemoCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.wemohome.coretests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  WemoHome:
+    build:
+      targets:
+        WemoHome: all
+        WemoCoreTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - WemoCoreTests
+    archive:
+      config: Release

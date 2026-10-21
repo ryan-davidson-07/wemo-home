@@ -1,0 +1,3 @@
+// Portable default. The optional local override is never required to generate/build.
+PRODUCT_BUNDLE_IDENTIFIER = local.wemohome.app
+#include? "../Local.xcconfig"
